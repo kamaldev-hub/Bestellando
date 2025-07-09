@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         verbose="true"
+         stopOnFailure="false">
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <report>
+            <html outputDirectory="tests/coverage/html"/>
+            <text outputFile="tests/coverage/coverage.txt"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="Bestellando Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <!-- Environment variables for testing -->
+        <!-- Adjust these to your test database configuration -->
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="3306"/> <!-- Or your test DB port -->
+        <env name="DB_DATABASE" value="bestellando_test_db"/>
+        <env name="DB_USERNAME" value="test_user"/>
+        <env name="DB_PASSWORD" value="test_password"/>
+        <env name="APP_ENV" value="testing"/>
+        <!-- Add any other environment variables needed for tests -->
+    </php>
+</phpunit>
