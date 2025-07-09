@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bestellando_web
+    ports:
+      - "${APP_PORT:-8080}:80" # Map host port (default 8080) to container port 80
+    volumes:
+      - .:/var/www/html # Mount source code for live development
+    depends_on:
+      - db
+    environment:
+      # Pass .env variables to PHP. Apache/PHP needs to be configured to read these.
+      # For PHP, variables prefixed with APACHE_ are typically available via getenv() or $_ENV/$_SERVER
+      # Or use a library like phpdotenv to load .env in index.php
+      MYSQL_HOST: ${DB_HOST:-db} # Service name 'db' acts as hostname
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      # APACHE_DOCUMENT_ROOT: /var/www/html/public # Already set in Dockerfile
+    networks:
+      - bestellando_network
+
+  db:
+    image: mysql:8.0
+    container_name: bestellando_db
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT:-3306}:3306" # Map host port (default 3306) to container port 3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - bestellando_db_data:/var/lib/mysql # Persist database data
+      # You can also mount an initial schema.sql here to be run on first startup
+      # - ./schema.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - bestellando_network
+
+volumes:
+  bestellando_db_data: # Named volume for database persistence
+
+networks:
+  bestellando_network:
+    driver: bridge

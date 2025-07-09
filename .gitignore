@@ -1,0 +1,28 @@
+# Composer
+vendor/
+composer.lock
+
+# Environment files
+.env
+
+# PHPUnit
+phpunit.result.cache
+tests/coverage/
+
+# IDE / OS specific
+.idea/
+.vscode/
+*.DS_Store
+nbproject/
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# Build artifacts (if any)
+build/
+dist/
